@@ -41,6 +41,18 @@
   </style>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  
+  <!-- MathJax for rendering LaTeX math formulas -->
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      }
+    };
+  </script>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
 
@@ -90,11 +102,11 @@
     <div class="container is-max-desktop">
       <div class="columns is-centered has-text-centered">
         <div class="column is-four-fifths">
-          <h2 class="title is-3">Qualitative Results</h2>
+          <h2 class="title is-3">Overall Results</h2>
           <div class="image-container">
-            <img src="static/images/one_step_prediction.png" alt="One-step predictions" style="width: 100%; border-radius: 5px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+            <img src="static/images/overall.png" alt="One-step predictions" style="width: 100%; border-radius: 5px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
             <p class="image-caption">
-              <span class="figure-number">Figure 4:</span> One-step predictions on all four PDE benchmarks using the best-performing conditioned FNO variant for each task. We visualize the input field, model prediction, ground truth, and error map.
+              <span class="figure-number"></span>One-step predictions on all four PDE benchmarks using the best-performing conditioned FNO variant for each task. For every benchmark, we show the input field at the rollout start time, the predicted field, the ground-truth field at the same time, and the $L^2$ error.
             </p>
           </div>
         </div>
@@ -148,7 +160,7 @@
       <div class="column is-half has-text-centered" style="background: white; border-radius: 10px; margin: 0.5rem; padding: 1.5rem; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
          <h4 class="title is-5">2. Global Conditioning</h4>
          <div class="image-container" style="height: 200px; display: flex; align-items: center; justify-content: center;">
-             <img src="static/images/global.pdf" alt="Global Conditioning" style="max-height: 100%; max-width: 100%;">
+             <img src="static/images/global.png" alt="Global Conditioning" style="max-height: 100%; max-width: 100%;">
          </div>
          <p class="content is-size-7 has-text-left" style="margin-top: 1rem;">
            <strong>Channel-wise Scaling:</strong> Parameters are mapped to a latent vector and used as multiplicative factors on the learned feature map. This introduces a global adjustment per channel without modifying spatial patterns.
@@ -187,13 +199,80 @@
 
 <section class="section">
   <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Experimental Benchmarks</h2>
+    <div class="content has-text-justified">
+      <p class="has-text-centered" style="margin-bottom: 2rem;">
+        We evaluate our conditioning strategies on four PDE benchmarks with varying physical parameters.
+      </p>
+    </div>
+
+    <div class="columns is-centered" style="margin-bottom: 1rem;">
+      <div class="column is-half has-text-centered" style="background: white; border-radius: 10px; margin: 0.5rem; padding: 1.5rem; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+        <h4 class="title is-5">Advection Diffusion</h4>
+        <p class="is-size-6" style="margin-bottom: 0.5rem;">$\partial_t u = \nu \Delta u - \mathbf{v} \cdot \nabla u + s(x, y, t)$</p>
+        <div class="image-container" style="margin: 1rem 0;">
+          <video controls style="width: 100%; max-width: 400px; border-radius: 5px;">
+            <source src="static/videos/advection.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+        <p class="is-size-7 has-text-grey">Varying velocity field $v_x$ and $v_y$</p>
+      </div>
+
+      <div class="column is-half has-text-centered" style="background: white; border-radius: 10px; margin: 0.5rem; padding: 1.5rem; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+        <h4 class="title is-5">Burgers Equation</h4>
+        <p class="is-size-6" style="margin-bottom: 0.5rem;">$\partial_t u + (u \cdot \nabla) u = \nu \Delta u$</p>
+        <div class="image-container" style="margin: 1rem 0;">
+          <video controls style="width: 100%; max-width: 400px; border-radius: 5px;">
+            <source src="static/videos/burgers.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+        <p class="is-size-7 has-text-grey">Varying viscosity $\nu$</p>
+      </div>
+    </div>
+
+    <div class="columns is-centered">
+      <div class="column is-half has-text-centered" style="background: white; border-radius: 10px; margin: 0.5rem; padding: 1.5rem; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+        <h4 class="title is-5">Elastic Waves</h4>
+        <p class="is-size-6" style="margin-bottom: 0.5rem;">
+          $\partial_t \mathbf{u} = \mathbf{v}$<br>
+          $\partial_t \mathbf{v} = (c_p^2 - c_s^2) \nabla(\nabla \cdot \mathbf{u}) + c_s^2 \Delta \mathbf{u}$
+        </p>
+        <div class="image-container" style="margin: 1rem 0;">
+          <video controls style="width: 100%; max-width: 400px; border-radius: 5px;">
+            <source src="static/videos/elasticity.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+        <p class="is-size-7 has-text-grey">Varying P-wave $c_p$ and S-wave speeds $c_s$</p>
+      </div>
+
+      <div class="column is-half has-text-centered" style="background: white; border-radius: 10px; margin: 0.5rem; padding: 1.5rem; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+        <h4 class="title is-5">Navier-Stokes Equation</h4>
+        <p class="is-size-6" style="margin-bottom: 0.5rem;">$\partial_t \omega + \mathbf{u} \cdot \nabla \omega = \nu \Delta \omega + f(x, y)$</p>
+        <div class="image-container" style="margin: 1rem 0;">
+          <video controls style="width: 100%; max-width: 400px; border-radius: 5px;">
+            <source src="static/videos/navier_stokes.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+        <p class="is-size-7 has-text-grey">Varying external forcing amplitudes</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
     <div class="columns is-centered">
       <div class="column is-four-fifths has-text-centered">
         <h2 class="title is-3">Scaling Laws</h2>
         <div class="image-container">
             <img src="static/images/scaling_law.png" alt="Scaling Law" style="max-width: 70%;">
             <p class="image-caption">
-              <span class="figure-number">Figure 3:</span> Scaling behavior of the local conditioning model as the number of training samples increases. Performance saturates at approximately 4k samples.
+              <span class="figure-number"></span> Scaling behavior of the local conditioning model as the number of training samples increases. Performance saturates at approximately 4k samples.
             </p>
         </div>
       </div>
@@ -262,11 +341,11 @@
 
     <div class="columns is-centered is-vcentered" style="margin-top: 20px;">
       <div class="column is-half has-text-centered">
-        <img src="static/images/refinement_error.png" alt="Refinement Error Curves" style="max-width: 95%; border: 1px solid #eee;">
+        <img src="static/images/stage2_refine.png" alt="Refinement Error Curves" style="max-width: 95%; border: 1px solid #eee;">
       </div>
       <div class="column is-half">
         <p class="image-caption has-text-left">
-          <span class="figure-number">Figure 5:</span> 
+          <span class="figure-number"></span> 
           Across refinement depths $k = 1$ to $k = 4$, the error curves almost overlap with the baseline model ($k = 0$), indicating that refinement does not improve long-horizon stability for this system. The highly advective dynamics dominate the evolution, and the correction steps fail to reduce accumulated rollout error.
         </p>
       </div>
@@ -275,12 +354,12 @@
     <div class="columns is-centered is-vcentered" style="margin-top: 40px;">
        <div class="column is-half">
         <p class="image-caption has-text-left">
-          <span class="figure-number">Figure 6:</span> 
+          <span class="figure-number"></span> 
           Across time steps $t = 0$ to $t = 6$, the predicted vorticity fields remain nearly identical for all refinement levels, showing no visible improvement over the baseline.
         </p>
       </div>
       <div class="column is-half has-text-centered">
-        <img src="static/images/refinement_visual.png" alt="Refinement Visual Results" style="max-width: 95%; border: 1px solid #eee;">
+        <img src="static/images/stage2_ns.png" alt="Refinement Visual Results" style="max-width: 95%; border: 1px solid #eee;">
       </div>
     </div>
 
