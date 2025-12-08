@@ -14,20 +14,30 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
-  
+
   <style>
-    /* Simple CSS override for the template */
     body { font-family: 'Noto Sans', sans-serif; }
     .title { font-family: 'Google Sans', sans-serif; }
     .publication-title { font-family: 'Google Sans', sans-serif; font-weight: bold; }
     .publication-authors { font-family: 'Google Sans', sans-serif; }
-    .footer { background-color: #f5f5f5; padding: 3rem 1.5rem 3rem; }
-    .image-container { text-align: center; margin-bottom: 20px; }
-    .image-caption { font-size: 0.9em; color: #555; margin-top: 10px; font-style: italic; }
-    .results-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-    .results-table th, .results-table td { border: 1px solid #ddd; padding: 8px; text-align: center; }
-    .results-table th { background-color: #f2f2f2; }
-    .bibtex-section { background-color: #f5f5f5; padding: 15px; border-radius: 5px; overflow-x: auto; }
+    
+    /* 增加一些间距和背景色，让页面更有层次感 */
+    .hero-body { padding: 3rem 1.5rem; }
+    .section { padding: 3rem 1.5rem; }
+    .is-light-bg { background-color: #f9f9f9; }
+    
+    .image-container { text-align: center; margin-bottom: 30px; }
+    .image-caption { font-size: 1.0em; color: #4a4a4a; margin-top: 15px; text-align: center; max-width: 800px; margin-left: auto; margin-right: auto; }
+    .figure-number { font-weight: bold; color: #363636; }
+    
+    .results-table { width: 80%; margin: 0 auto; border-collapse: collapse; margin-top: 20px; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+    .results-table th, .results-table td { border: 1px solid #ddd; padding: 12px; text-align: center; }
+    .results-table th { background-color: #f2f2f2; font-weight: 600; }
+    
+    .bibtex-section { background-color: #f5f5f5; padding: 20px; border-radius: 8px; overflow-x: auto; font-family: 'Courier New', monospace; font-size: 0.9em; }
+    
+    /* 让Method的两个图并排 */
+    .method-column { padding: 10px; }
   </style>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -55,21 +65,16 @@
           <div class="column has-text-centered">
             <div class="publication-links">
               <span class="link-block">
-                <a href="#"
+                <a href="CSE598_Conditional_FNO.pdf" target="_blank"
                    class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="fas fa-file-pdf"></i>
-                  </span>
+                  <span class="icon"><i class="fas fa-file-pdf"></i></span>
                   <span>Paper</span>
                 </a>
               </span>
               <span class="link-block">
-                <a href="#"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="fab fa-github"></i>
-                  </span>
-                  <span>Code (Coming Soon)</span>
+                <a href="#" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fab fa-github"></i></span>
+                  <span>Code</span>
                 </a>
               </span>
             </div>
@@ -80,15 +85,20 @@
   </div>
 </section>
 
-<section class="hero teaser">
-  <div class="container is-max-desktop">
-    <div class="hero-body">
-        <div class="image-container">
-            <img src="static/images/teaser.png" alt="Teaser Figure" style="max-width: 100%; height: auto; border: 1px dashed #ccc; padding: 20px;">
+<section class="hero is-light-bg">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Qualitative Results</h2>
+          <div class="image-container">
+            <img src="static/images/one_step_prediction.png" alt="One-step predictions" style="width: 100%; border-radius: 5px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
             <p class="image-caption">
-              Figure: We systematically compare three conditioning mechanisms (Local, Global, Input-level) for Fourier Neural Operators across diverse PDE benchmarks.
+              <span class="figure-number">Figure 4:</span> One-step predictions on all four PDE benchmarks using the best-performing conditioned FNO variant for each task. We visualize the input field, model prediction, ground truth, and error map.
             </p>
+          </div>
         </div>
+      </div>
     </div>
   </div>
 </section>
@@ -109,12 +119,36 @@
             show that conditioning consistently improves parameter generalization. <strong>Local modulation performs best on most benchmarks</strong>, 
             while global scaling is most effective for linear elasticity. 
           </p>
-          <p>
-            In a second stage, we apply the PDE-Refiner training scheme to the strongest method on each system and find that 
-            refinement improves some PDEs but has limited effect on Navier-Stokes due to its strongly advective dynamics. 
-            Our results provide a clear comparison of conditioning designs and practical guidance for building parameter-aware neural operators.
-          </p>
         </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section is-light-bg">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Architecture Design</h2>
+    <div class="content has-text-justified">
+      <p>
+        We propose and compare distinct architectural modifications to inject physical parameters $p$ into the FNO backbone.
+      </p>
+    </div>
+
+    <div class="columns is-centered is-vcentered">
+      <div class="column is-half method-column has-text-centered">
+         <h4 class="title is-5">Local Conditioning</h4>
+         <img src="static/images/local_architecture.png" alt="Local Conditioning Architecture" style="max-width: 95%; border: 1px solid #ddd; padding: 5px; background: white;">
+         <p class="image-caption is-size-7">
+           <span class="figure-number">Figure 1:</span> <strong>Feature-wise Modulation.</strong> Parameters control affine modulation inserted between spectral transformations.
+         </p>
+      </div>
+
+      <div class="column is-half method-column has-text-centered">
+         <h4 class="title is-5">Global Conditioning</h4>
+         <img src="static/images/global_architecture.png" alt="Global Conditioning Architecture" style="max-width: 95%; border: 1px solid #ddd; padding: 5px; background: white;">
+         <p class="image-caption is-size-7">
+           <span class="figure-number">Figure 2:</span> <strong>Channel-wise Scaling.</strong> Parameters modulate the operator output through a shared affine transformation.
+         </p>
       </div>
     </div>
   </div>
@@ -123,96 +157,104 @@
 <section class="section">
   <div class="container is-max-desktop">
     <div class="columns is-centered">
-      <div class="column is-full-width">
-        <h2 class="title is-3">Methodology</h2>
-        <div class="content has-text-justified">
-          <p>
-            We propose and analyze three distinct architectural modifications to the standard FNO to incorporate physical parameters $p$ (e.g., viscosity, wave speeds):
-          </p>
-          <ul>
-            <li>
-              <strong>Local Conditioning (Feature-wise Modulation):</strong> The parameter vector is encoded to produce channel-wise scale and shift values, which are broadcast spatially and applied via FiLM layers between spectral blocks. This allows parameters to adjust each Fourier block directly.
-            </li>
-            <li>
-              <strong>Global Conditioning (Channel-wise Scaling):</strong> Parameters are mapped to a latent vector and used as multiplicative factors on the learned feature map. This introduces a global adjustment per channel without modifying spatial patterns.
-            </li>
-            <li>
-              <strong>Input-Level Conditioning:</strong> Parameters are broadcast across the grid and concatenated as extra channels before the first Fourier layer.
-            </li>
-          </ul>
-          
-          <div class="image-container">
-            <img src="static/images/method.png" alt="Method Architecture" style="max-width: 80%; height: auto; border: 1px dashed #ccc; padding: 20px;">
+      <div class="column is-four-fifths has-text-centered">
+        <h2 class="title is-3">Scaling Laws</h2>
+        <div class="image-container">
+            <img src="static/images/scaling_law.png" alt="Scaling Law" style="max-width: 70%;">
             <p class="image-caption">
-                Visual comparison of Local Conditioning vs. Global Conditioning mechanisms within the FNO block.
+              <span class="figure-number">Figure 3:</span> Scaling behavior of the local conditioning model as the number of training samples increases. Performance saturates at approximately 4k samples.
             </p>
-          </div>
         </div>
       </div>
+    </div>
+  </div>
+</section>
+
+<section class="section is-light-bg">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Quantitative Comparison</h2>
+    <div class="content">
+      <table class="results-table">
+        <thead>
+          <tr>
+            <th>Method</th>
+            <th>Advection</th>
+            <th>Burgers</th>
+            <th>Elasticity</th>
+            <th>Navier-Stokes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Local</strong></td>
+            <td><strong>0.1050</strong></td>
+            <td><strong>0.0016</strong></td>
+            <td>0.3232</td>
+            <td>0.1185</td>
+          </tr>
+          <tr>
+            <td><strong>Global</strong></td>
+            <td>0.1262</td>
+            <td>0.0019</td>
+            <td><strong>0.2967</strong></td>
+            <td>0.1359</td>
+          </tr>
+          <tr>
+            <td><strong>Input-Level</strong></td>
+            <td>0.1343</td>
+            <td>0.0023</td>
+            <td>0.2979</td>
+            <td><strong>0.1175</strong></td>
+          </tr>
+          <tr style="color: #888;">
+            <td>Vanilla FNO</td>
+            <td>0.9430</td>
+            <td>0.0369</td>
+            <td>0.5057</td>
+            <td>0.1490</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="has-text-centered is-size-7" style="margin-top: 10px;">Table 1: Relative L2 error comparison (Stage 1).</p>
     </div>
   </div>
 </section>
 
 <section class="section">
   <div class="container is-max-desktop">
-    <div class="columns is-centered">
-      <div class="column is-full-width">
-        <h2 class="title is-3">Key Results</h2>
-        <div class="content has-text-justified">
-          <p>
-            We evaluated the methods on four benchmarks: <strong>2D Advection-Diffusion</strong>, <strong>2D Burgers</strong>, <strong>Elastic Waves</strong>, and <strong>Navier-Stokes</strong>.
-          </p>
-          
-          <table class="results-table">
-            <thead>
-              <tr>
-                <th>Method</th>
-                <th>Advection</th>
-                <th>Burgers</th>
-                <th>Elasticity</th>
-                <th>Navier-Stokes</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><strong>Local</strong></td>
-                <td><strong>0.1050</strong></td>
-                <td><strong>0.0016</strong></td>
-                <td>0.3232</td>
-                <td>0.1185</td>
-              </tr>
-              <tr>
-                <td><strong>Global</strong></td>
-                <td>0.1262</td>
-                <td>0.0019</td>
-                <td><strong>0.2967</strong></td>
-                <td>0.1359</td>
-              </tr>
-              <tr>
-                <td><strong>Input-Level</strong></td>
-                <td>0.1343</td>
-                <td>0.0023</td>
-                <td>0.2979</td>
-                <td><strong>0.1175</strong></td>
-              </tr>
-              <tr>
-                <td>Vanilla FNO</td>
-                <td>0.9430</td>
-                <td>0.0369</td>
-                <td>0.5057</td>
-                <td>0.1490</td>
-              </tr>
-            </tbody>
-          </table>
-          <p class="is-size-7 has-text-centered" style="margin-top: 10px;">
-            *Table 1: Relative L2 error comparison. Local conditioning performs best on nonlinear/advective systems.*
-          </p>
-        </div>
+    <h2 class="title is-3 has-text-centered">Refinement Analysis: Navier-Stokes</h2>
+    <div class="content has-text-justified">
+      <p>
+        In Stage 2, we applied the PDE-Refiner training scheme. While effective for some systems, it showed limitations on the Navier-Stokes benchmark due to dominant advective dynamics.
+      </p>
+    </div>
+
+    <div class="columns is-centered is-vcentered" style="margin-top: 20px;">
+      <div class="column is-half has-text-centered">
+        <img src="static/images/refinement_error.png" alt="Refinement Error Curves" style="max-width: 95%; border: 1px solid #eee;">
+      </div>
+      <div class="column is-half">
+        <p class="image-caption has-text-left">
+          <span class="figure-number">Figure 5:</span> 
+          Across refinement depths $k = 1$ to $k = 4$, the error curves almost overlap with the baseline model ($k = 0$), indicating that refinement does not improve long-horizon stability for this system. The highly advective dynamics dominate the evolution, and the correction steps fail to reduce accumulated rollout error.
+        </p>
       </div>
     </div>
+
+    <div class="columns is-centered is-vcentered" style="margin-top: 40px;">
+       <div class="column is-half">
+        <p class="image-caption has-text-left">
+          <span class="figure-number">Figure 6:</span> 
+          Across time steps $t = 0$ to $t = 6$, the predicted vorticity fields remain nearly identical for all refinement levels, showing no visible improvement over the baseline.
+        </p>
+      </div>
+      <div class="column is-half has-text-centered">
+        <img src="static/images/refinement_visual.png" alt="Refinement Visual Results" style="max-width: 95%; border: 1px solid #eee;">
+      </div>
+    </div>
+
   </div>
 </section>
-
 
 <section class="section" id="BibTeX">
   <div class="container is-max-desktop content">
@@ -230,7 +272,7 @@
   <div class="container">
     <div class="content has-text-centered">
       <p>
-        Website template borrowed from <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>.
+        Website template derived from <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>.
       </p>
     </div>
   </div>
