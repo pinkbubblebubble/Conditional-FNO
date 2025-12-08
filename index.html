@@ -130,27 +130,58 @@
     <h2 class="title is-3 has-text-centered">Architecture Design</h2>
     <div class="content has-text-justified">
       <p>
-        We propose and compare distinct architectural modifications to inject physical parameters $p$ into the FNO backbone.
+        We systematically compare three distinct architectural modifications to inject physical parameters $p$ into the FNO backbone.
       </p>
     </div>
 
-    <div class="columns is-centered is-vcentered">
-      <div class="column is-half method-column has-text-centered">
-         <h4 class="title is-5">Local Conditioning</h4>
-         <img src="static/images/local.png" alt="Local Conditioning Architecture" style="max-width: 95%; border: 1px solid #ddd; padding: 5px; background: white;">
-         <p class="image-caption is-size-7">
-           <span class="figure-number">Figure 1:</span> <strong>Feature-wise Modulation.</strong> Parameters control affine modulation inserted between spectral transformations.
+    <div class="columns is-centered" style="margin-bottom: 2rem;">
+      <div class="column is-half has-text-centered" style="background: white; border-radius: 10px; margin: 0.5rem; padding: 1.5rem; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+         <h4 class="title is-5">1. Local Conditioning</h4>
+         <div class="image-container" style="height: 200px; display: flex; align-items: center; justify-content: center;">
+            <img src="static/images/local.png" alt="Local Conditioning" style="max-height: 100%; max-width: 100%;">
+         </div>
+         <p class="content is-size-7 has-text-left" style="margin-top: 1rem;">
+           <strong>Feature-wise Modulation:</strong> Parameters are encoded to produce channel-wise scale and shift values, applied via FiLM layers between spectral blocks. This allows parameters to locally adjust each Fourier block.
          </p>
       </div>
 
-      <div class="column is-half method-column has-text-centered">
-         <h4 class="title is-5">Global Conditioning</h4>
-         <img src="static/images/global.pdf" alt="Global Conditioning Architecture" style="max-width: 95%; border: 1px solid #ddd; padding: 5px; background: white;">
-         <p class="image-caption is-size-7">
-           <span class="figure-number">Figure 2:</span> <strong>Channel-wise Scaling.</strong> Parameters modulate the operator output through a shared affine transformation.
+      <div class="column is-half has-text-centered" style="background: white; border-radius: 10px; margin: 0.5rem; padding: 1.5rem; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+         <h4 class="title is-5">2. Global Conditioning</h4>
+         <div class="image-container" style="height: 200px; display: flex; align-items: center; justify-content: center;">
+             <img src="static/images/global.pdf" alt="Global Conditioning" style="max-height: 100%; max-width: 100%;">
+         </div>
+         <p class="content is-size-7 has-text-left" style="margin-top: 1rem;">
+           <strong>Channel-wise Scaling:</strong> Parameters are mapped to a latent vector and used as multiplicative factors on the learned feature map. This introduces a global adjustment per channel without modifying spatial patterns.
          </p>
       </div>
     </div>
+
+    <div class="columns is-centered">
+      <div class="column is-full-width" style="background: white; border-radius: 10px; margin: 0.5rem; padding: 1.5rem; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+        <div class="columns is-vcentered">
+            <div class="column is-one-quarter has-text-centered" style="border-right: 1px solid #eee;">
+                <h4 class="title is-5">3. Input-Level</h4>
+                <span class="icon is-large has-text-grey">
+                    <i class="fas fa-layer-group fa-3x"></i>
+                </span>
+                <p class="is-size-7 has-text-grey" style="margin-top:10px;">(Concatenation Strategy)</p>
+            </div>
+            <div class="column">
+                <p class="content">
+                    <strong>Input-Level Conditioning (Concatenation):</strong> 
+                    This is the simplest strategy where physical parameters $p$ are broadcast spatially across the grid and concatenated as extra channels to the input $a(x)$ before the first lifting layer.
+                </p>
+                <div class="content has-text-centered" style="background: #f4f4f4; padding: 10px; border-radius: 5px; font-family: monospace;">
+                    Input<sub>new</sub> = Concat([ Input<sub>original</sub>, Broadcast(p) ], dim=channel)
+                </div>
+                <p class="content is-size-7">
+                    While simple to implement, this method forces the network to learn the interaction between parameters and dynamics solely through the standard FNO convolution operations, without explicit modulation mechanisms.
+                </p>
+            </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
 
