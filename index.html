@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="Exploring Conditioning Strategies for Fourier Neural Operators: A systematic comparison of conditioning mechanisms for PDE surrogate modeling.">
+  <meta name="keywords" content="Fourier Neural Operator, FNO, PDE, Scientific Machine Learning, Deep Learning">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Exploring Conditioning Strategies for Fourier Neural Operators</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  
+  <style>
+    /* Simple CSS override for the template */
+    body { font-family: 'Noto Sans', sans-serif; }
+    .title { font-family: 'Google Sans', sans-serif; }
+    .publication-title { font-family: 'Google Sans', sans-serif; font-weight: bold; }
+    .publication-authors { font-family: 'Google Sans', sans-serif; }
+    .footer { background-color: #f5f5f5; padding: 3rem 1.5rem 3rem; }
+    .image-container { text-align: center; margin-bottom: 20px; }
+    .image-caption { font-size: 0.9em; color: #555; margin-top: 10px; font-style: italic; }
+    .results-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    .results-table th, .results-table td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+    .results-table th { background-color: #f2f2f2; }
+    .bibtex-section { background-color: #f5f5f5; padding: 15px; border-radius: 5px; overflow-x: auto; }
+  </style>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">Exploring Conditioning Strategies for Fourier Neural Operators</h1>
+          
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="#">Wenxi Cai</a><sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="#">Yimin Wang</a><sup>1</sup></span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>University of Michigan</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <span class="link-block">
+                <a href="#"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="#"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code (Coming Soon)</span>
+                </a>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+        <div class="image-container">
+            <img src="static/images/teaser.png" alt="Teaser Figure" style="max-width: 100%; height: auto; border: 1px dashed #ccc; padding: 20px;">
+            <p class="image-caption">
+              Figure: We systematically compare three conditioning mechanisms (Local, Global, Input-level) for Fourier Neural Operators across diverse PDE benchmarks.
+            </p>
+        </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Learning neural operators for parameter-dependent PDEs requires integrating physical parameters into the operator architecture. 
+            We systematically compare three conditioning strategies for Fourier Neural Operators (FNOs): 
+            <strong>local feature-wise modulation</strong>, <strong>global channel-wise scaling</strong>, and <strong>input-level concatenation</strong>.
+          </p>
+          <p>
+            Using identical backbones, we evaluate all mechanisms on four PDE systems—advection, Burgers, elasticity, and Navier-Stokes—and 
+            show that conditioning consistently improves parameter generalization. <strong>Local modulation performs best on most benchmarks</strong>, 
+            while global scaling is most effective for linear elasticity. 
+          </p>
+          <p>
+            In a second stage, we apply the PDE-Refiner training scheme to the strongest method on each system and find that 
+            refinement improves some PDEs but has limited effect on Navier-Stokes due to its strongly advective dynamics. 
+            Our results provide a clear comparison of conditioning designs and practical guidance for building parameter-aware neural operators.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Methodology</h2>
+        <div class="content has-text-justified">
+          <p>
+            We propose and analyze three distinct architectural modifications to the standard FNO to incorporate physical parameters $p$ (e.g., viscosity, wave speeds):
+          </p>
+          <ul>
+            <li>
+              <strong>Local Conditioning (Feature-wise Modulation):</strong> The parameter vector is encoded to produce channel-wise scale and shift values, which are broadcast spatially and applied via FiLM layers between spectral blocks. This allows parameters to adjust each Fourier block directly.
+            </li>
+            <li>
+              <strong>Global Conditioning (Channel-wise Scaling):</strong> Parameters are mapped to a latent vector and used as multiplicative factors on the learned feature map. This introduces a global adjustment per channel without modifying spatial patterns.
+            </li>
+            <li>
+              <strong>Input-Level Conditioning:</strong> Parameters are broadcast across the grid and concatenated as extra channels before the first Fourier layer.
+            </li>
+          </ul>
+          
+          <div class="image-container">
+            <img src="static/images/method.png" alt="Method Architecture" style="max-width: 80%; height: auto; border: 1px dashed #ccc; padding: 20px;">
+            <p class="image-caption">
+                Visual comparison of Local Conditioning vs. Global Conditioning mechanisms within the FNO block.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Key Results</h2>
+        <div class="content has-text-justified">
+          <p>
+            We evaluated the methods on four benchmarks: <strong>2D Advection-Diffusion</strong>, <strong>2D Burgers</strong>, <strong>Elastic Waves</strong>, and <strong>Navier-Stokes</strong>.
+          </p>
+          
+          <table class="results-table">
+            <thead>
+              <tr>
+                <th>Method</th>
+                <th>Advection</th>
+                <th>Burgers</th>
+                <th>Elasticity</th>
+                <th>Navier-Stokes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Local</strong></td>
+                <td><strong>0.1050</strong></td>
+                <td><strong>0.0016</strong></td>
+                <td>0.3232</td>
+                <td>0.1185</td>
+              </tr>
+              <tr>
+                <td><strong>Global</strong></td>
+                <td>0.1262</td>
+                <td>0.0019</td>
+                <td><strong>0.2967</strong></td>
+                <td>0.1359</td>
+              </tr>
+              <tr>
+                <td><strong>Input-Level</strong></td>
+                <td>0.1343</td>
+                <td>0.0023</td>
+                <td>0.2979</td>
+                <td><strong>0.1175</strong></td>
+              </tr>
+              <tr>
+                <td>Vanilla FNO</td>
+                <td>0.9430</td>
+                <td>0.0369</td>
+                <td>0.5057</td>
+                <td>0.1490</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="is-size-7 has-text-centered" style="margin-top: 10px;">
+            *Table 1: Relative L2 error comparison. Local conditioning performs best on nonlinear/advective systems.*
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre class="bibtex-section"><code>@article{cai2025exploring,
+  title={Exploring Conditioning Strategies for Fourier Neural Operators},
+  author={Cai, Wenxi and Wang, Yimin},
+  journal={arXiv preprint}, 
+  year={2025}
+}</code></pre>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+      <p>
+        Website template borrowed from <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>.
+      </p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
