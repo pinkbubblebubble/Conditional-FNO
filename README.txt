@@ -121,8 +121,9 @@ SRC/
     infer_series.py   - Series inference script
 
 DOC/
-  CSE598_Conditional_FNO.pdf  - Project write-up
-  [presentation slides PDF]   - Presentation slides
+  Exploring Conditioning Strategies for Fourier Neural Operators.pdf  - Project write-up
+  presentation.pdf   - Presentation slides
+  poster.pdf         - Poster
 
 ================================================================================
 CONTACT

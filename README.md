@@ -158,12 +158,13 @@ Results will include visualizations and error metrics in the checkpoint director
 │       ├── infer.py        # Single-step inference script
 │       └── infer_series.py # Series inference script
 ├── DOC/
-│   ├── CSE598_Conditional_FNO.pdf  # Project write-up
-│   └── presentation.pdf             # Presentation slides
+│   ├── Exploring Conditioning Strategies for Fourier Neural Operators.pdf  # write-up
+│   ├── presentation.pdf             # Presentation slides
+│   └── poster.pdf                   # Poster
 └── README.md                        # This file
 ```
 
-## 📄 Citation
+<!-- ## 📄 Citation
 
 If you find this work useful, please cite:
 
@@ -174,12 +175,12 @@ If you find this work useful, please cite:
   journal={arXiv preprint},
   year={2025}
 }
-```
+``` -->
 
 ## 🔗 Links
 
-- **Project Webpage**: [Link to your webpage]
-- **Paper**: [DOC/CSE598_Conditional_FNO.pdf](DOC/CSE598_Conditional_FNO.pdf)
+- **Project Webpage**: [https://pinkbubblebubble.github.io/Conditional-FNO/](https://pinkbubblebubble.github.io/Conditional-FNO/)
+- **Paper**: [DOC/Exploring Conditioning Strategies for Fourier Neural Operators.pdf](DOC/Exploring Conditioning Strategies for Fourier Neural Operators.pdf)
 - **Slides**: [DOC/presentation.pdf](DOC/presentation.pdf)
 - **GitHub Repository**: [https://github.com/pinkbubblebubble/Conditional-FNO](https://github.com/pinkbubblebubble/Conditional-FNO)
 
